@@ -1,11 +1,11 @@
-name: 加速版构建 6.1.118 欧加真OKI内核
+name: 加速版构建 6.1.128 (天玑特供)欧加真OKI内核
 
 env:
   TZ: Asia/Shanghai
   ANDROID_VERSION: 'android14'
   KERNEL_VERSION: '6.1'
   KERNEL_NAME: 'android14-11-o-gca13bffobf09'
-  CCACHE_KEY: ccache-neov4-6.1.118
+  CCACHE_KEY: ccache-neov3-6.1.128
 
 on:
   workflow_dispatch:
@@ -55,7 +55,7 @@ on:
           - 'true'
           - 'default'
       better_net:
-        description: '是否开启网络功能拓展配置(用于为ipset及需要iptables等高级网络功能内核支持的程序提供支持)'
+        description: '是否开启网络功能拓展配置(用于为ipset及需要iptables等高级网络功能内核支持的程序提供支持,天玑机型可能导致bug,建议关闭)'
         required: true
         type: boolean
         default: 'false'
@@ -121,9 +121,9 @@ jobs:
           rm -f ./ccache &
           
           echo "正在克隆源码仓库..."
-          aria2c -s16 -x16 -k1M https://github.com/cctv18/android_kernel_common_oneplus_sm8650/archive/refs/heads/oneplus/sm8650_b_16.0.0_oneplus12.zip -o common.zip && 
+          aria2c -s16 -x16 -k1M https://github.com/cctv18/android_kernel_oneplus_mt6897/archive/refs/heads/oneplus/mt6897_v_15.0.0_oneplus_pad.zip -o common.zip && 
           unzip -q common.zip && 
-          mv "android_kernel_common_oneplus_sm8650-oneplus-sm8650_b_16.0.0_oneplus12" common &&
+          mv "android_kernel_oneplus_mt6897-oneplus-mt6897_v_15.0.0_oneplus_pad" common &&
           rm -rf common.zip &
           
           echo "正在克隆llvm-Clang20工具链..." &&
@@ -148,11 +148,11 @@ jobs:
 
       - name: 配置ccache目录
         run: |
-          echo "CCACHE_DIR=$HOME/.ccache_6.1.118" >> $GITHUB_ENV
+          echo "CCACHE_DIR=$HOME/.ccache_6.1.128" >> $GITHUB_ENV
           echo "CCACHE_MAXSIZE=3G" >> $GITHUB_ENV
           echo "当前磁盘空间："
           df -h
-          echo "当前构建内核版本：6.1.118"
+          echo "当前构建内核版本：6.1.128"
 
       - name: 载入当前版本内核的 ccache缓存
         uses: actions/cache@v4
